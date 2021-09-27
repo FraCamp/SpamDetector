@@ -15,11 +15,11 @@ df = df1[['label', 'text']]
 df.loc[df["label"] == 'ham', "Category",] = 0
 df.loc[df["label"] == 'spam', "Category",] = 1
 # Leaving the original column "label" (ham, spam), adding a new column "Label"(1,0)
-# df.loc[df["label"] == 'ham', "Label",] = 1
-# df.loc[df["label"] == 'spam', "Label",] = 0
+# df.loc[df["label"] == 'ham', "Label",] = 0
+# df.loc[df["label"] == 'spam', "Label",] = 1
 
 df = df.rename(columns={'text':'Content'})
-dff = df[['Category', 'Content']]
+dff = df[['Content', 'Category']]
 
 x = dff['Category']
 y = dff['Content']
@@ -38,5 +38,20 @@ print("x_test")
 print(x_test)
 print("y_test")
 print(y_test)
+
+# feature extraction, coversion to lower case and removal of stop words using TFIDF VECTORIZER
+
+# Finding the term frequency-inverse document frequency (tf-idf, useful into textanalysis and in order to use machine
+# learning algorithm for Natural Language Processing) by multiplying two metrics: how many times a
+# word appears in a document, and the inverse document frequency of the word across a set of documents
+tfvec = TfidfVectorizer(min_df=1, stop_words='english', lowercase=True)
+print("TfVectorizer")
+
+y_trainFeat = tfvec.fit_transform(y_train)
+y_testFeat = tfvec.transform(y_test)
+print("Fit_trasform")
+print(y_trainFeat.toarray())
+print("Trasform")
+print(y_testFeat.toarray())
 
 # print(dff)
