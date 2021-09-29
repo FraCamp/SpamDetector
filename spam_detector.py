@@ -45,13 +45,49 @@ print(y_test)
 # learning algorithm for Natural Language Processing) by multiplying two metrics: how many times a
 # word appears in a document, and the inverse document frequency of the word across a set of documents
 tfvec = TfidfVectorizer(min_df=1, stop_words='english', lowercase=True)
-print("TfVectorizer")
+# print("TfVectorizer")
 
 y_trainFeat = tfvec.fit_transform(y_train)
 y_testFeat = tfvec.transform(y_test)
-print("Fit_trasform")
-print(y_trainFeat.toarray())
-print("Trasform")
-print(y_testFeat.toarray())
+# print("Fit_trasform")
+# print(y_trainFeat.toarray())
+# print("Trasform")
+# print(y_testFeat.toarray())
 
 # print(dff)
+
+# SVM is used to model
+x_trainSvm = x_train.astype('int')
+classifierModel = LinearSVC()
+classifierModel.fit(y_trainFeat, x_trainSvm)
+predResult = classifierModel.predict(y_testFeat)
+
+# GNB is used to model
+x_trainGnb = x_train.astype('int')
+classifierModel2 = MultinomialNB()
+classifierModel2.fit(y_trainFeat, x_trainGnb)
+predResult2 = classifierModel2.predict(y_testFeat)
+
+# Calc accuracy,converting to int - solves - cant handle mix of unknown and binary
+x_test = x_test.astype('int')
+print(x_test)
+actual_Y = x_test.to_numpy()
+
+print("~~~~~~~~~~SVM RESULTS~~~~~~~~~~")
+#Accuracy score using SVM
+print("Accuracy Score using SVM: {0:.4f}".format(accuracy_score(actual_Y, predResult)*100))
+#FScore MACRO using SVM
+print("F Score using SVM: {0: .4f}".format(f1_score(actual_Y, predResult, average='macro')*100))
+cmSVM=confusion_matrix(actual_Y, predResult)
+#"[True negative  False Positive\nFalse Negative True Positive]"
+print("Confusion matrix using SVM:")
+print(cmSVM)
+print("~~~~~~~~~~MNB RESULTS~~~~~~~~~~")
+#Accuracy score using MNB
+print("Accuracy Score using MNB: {0:.4f}".format(accuracy_score(actual_Y, predResult2)*100))
+#FScore MACRO using MNB
+print("F Score using MNB:{0: .4f}".format(f1_score(actual_Y, predResult2, average='macro')*100))
+cmMNb=confusion_matrix(actual_Y, predResult2)
+#"[True negative  False Positive\nFalse Negative True Positive]"
+print("Confusion matrix using MNB:")
+print(cmMNb)
