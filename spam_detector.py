@@ -94,7 +94,7 @@ print("Confusion matrix using MNB:")
 print(cmMNb)
 
 print()
-print("/-------------------SpamDetector for SMS-------------------/")
+print("/---------------------SpamDetector for SMS--------------------/")
 # using encoding options in order to open and clean the csv, which has some empty columns
 df2 = pd.read_csv("sms_spam.csv", encoding = "ISO-8859-1")
 dfsp = df2[['v1', 'v2']]
@@ -102,4 +102,46 @@ dfsp.loc[dfsp["v1"] == 'ham', "Category"] = 0
 dfsp.loc[dfsp["v1"] == 'spam', "Category"] = 1
 dfsp = dfsp.rename(columns={'v2': 'Content'})
 dfs = dfsp[['Content', 'Category']]
-print(dfs)
+
+xs = dfs['Category']
+ys = dfs['Content']
+xs_train, xs_test, ys_train, ys_test = train_test_split(xs, ys, train_size=0.8, test_size=0.2, random_state=3)
+tfvecs = TfidfVectorizer(min_df=1, stop_words='english', lowercase=True)
+ys_trainFeat = tfvecs.fit_transform(ys_train)
+ys_testFeat = tfvecs.transform(ys_test)
+
+# SVM is used to model
+xs_trainSvm = xs_train.astype('int')
+classifierModel = LinearSVC()
+classifierModel.fit(ys_trainFeat, xs_trainSvm)
+predResult3 = classifierModel.predict(ys_testFeat)
+
+# GNB is used to model
+xs_trainGnb = xs_train.astype('int')
+classifierModel2 = MultinomialNB()
+classifierModel2.fit(ys_trainFeat, xs_trainGnb)
+predResult4 = classifierModel2.predict(ys_testFeat)
+
+# Calc accuracy,converting to int - solves - cant handle mix of unknown and binary
+xs_test = xs_test.astype('int')
+# print(x_test)
+actual_Ys = xs_test.to_numpy()
+
+print("~~~~~~~~~~SVM RESULTS~~~~~~~~~~")
+# Accuracy score using SVM
+print("Accuracy Score using SVM: {0:.4f}".format(accuracy_score(actual_Ys, predResult3) * 100))
+# FScore MACRO using SVM
+print("F Score using SVM: {0: .4f}".format(f1_score(actual_Ys, predResult3, average='macro') * 100))
+cmSVMs = confusion_matrix(actual_Ys, predResult3)
+# "[True negative  False Positive\nFalse Negative True Positive]"
+print("Confusion matrix using SVM:")
+print(cmSVMs)
+print("~~~~~~~~~~MNB RESULTS~~~~~~~~~~")
+# Accuracy score using MNB
+print("Accuracy Score using MNB: {0:.4f}".format(accuracy_score(actual_Ys, predResult4) * 100))
+# FScore MACRO using MNB
+print("F Score using MNB:{0: .4f}".format(f1_score(actual_Ys, predResult4, average='macro') * 100))
+cmMNbs = confusion_matrix(actual_Ys, predResult4)
+# "[True negative  False Positive\nFalse Negative True Positive]"
+print("Confusion matrix using MNB:")
+print(cmMNbs)
