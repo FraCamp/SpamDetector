@@ -1,6 +1,6 @@
 # importing dependencies
 import pandas as pd
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
 from sklearn.neighbors import KNeighborsClassifier
 
 pd.options.mode.chained_assignment = None  # default='warn'
@@ -83,6 +83,12 @@ classifierRF = RandomForestClassifier(n_estimators=10, max_depth=None, min_sampl
 classifierRF.fit(y_trainFeat, x_trainRF)
 predResMailRF = classifierRF.predict(y_testFeat)
 
+#Ada Boost is used to model
+x_trainAdaB = x_train.astype('int')
+classifierAdaB = AdaBoostClassifier(n_estimators=100)
+classifierAdaB.fit(y_trainFeat, x_trainAdaB)
+predResMailAdaB = classifierAdaB.predict(y_testFeat)
+
 # Calc accuracy,converting to int - solves - cant handle mix of unknown and binary
 x_test = x_test.astype('int')
 # print(x_test)
@@ -133,6 +139,17 @@ cmRF = confusion_matrix(actual_Y, predResMailRF)
 print("Confusion matrix using RF:")
 print(cmRF)
 print()
+print("\tAda Boost RESULTS")
+print("Estimators Number: 100")
+# Accuracy score using MNB
+print("Accuracy Score using AdaB: {0:.4f}".format(accuracy_score(actual_Y, predResMailAdaB) * 100))
+# FScore MACRO using MNB
+print("F Score using AdaB:{0: .4f}".format(f1_score(actual_Y, predResMailAdaB, average='macro') * 100))
+cmAdaB = confusion_matrix(actual_Y, predResMailAdaB)
+# [True negative  False Positive
+# False Negative True Positive]
+print("Confusion matrix using AdaB:")
+print(cmAdaB)
 
 print("\n")
 print("/---------------------SpamDetector for SMS--------------------/")
@@ -172,6 +189,12 @@ xs_trainRF = xs_train.astype('int')
 # classifierRF = RandomForestClassifier(n_estimators=10, max_depth=None, min_samples_split=2, random_state=None)
 classifierRF.fit(ys_trainFeat, xs_trainRF)
 predResSmsRF = classifierRF.predict(ys_testFeat)
+
+#Ada Boost is used to model
+xs_trainAdaB = xs_train.astype('int')
+# classifierAdaB = AdaBoostClassifier(n_estimators=100)
+classifierAdaB.fit(ys_trainFeat, xs_trainAdaB)
+predResSmsAdaB = classifierAdaB.predict(ys_testFeat)
 
 # Calc accuracy,converting to int - solves - cant handle mix of unknown and binary
 xs_test = xs_test.astype('int')
@@ -223,3 +246,14 @@ cmRFs = confusion_matrix(actual_Ys, predResSmsRF)
 print("Confusion matrix using RF:")
 print(cmRFs)
 print()
+print("\tAda Boost RESULTS")
+print("Estimators Number: 100")
+# Accuracy score using MNB
+print("Accuracy Score using AdaB: {0:.4f}".format(accuracy_score(actual_Ys, predResSmsAdaB) * 100))
+# FScore MACRO using MNB
+print("F Score using AdaB:{0: .4f}".format(f1_score(actual_Ys, predResSmsAdaB, average='macro') * 100))
+cmAdaBs = confusion_matrix(actual_Ys, predResSmsAdaB)
+# [True negative  False Positive
+# False Negative True Positive]
+print("Confusion matrix using AdaB:")
+print(cmAdaBs)
