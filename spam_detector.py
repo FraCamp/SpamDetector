@@ -1,5 +1,6 @@
 # importing dependencies
 import pandas as pd
+from sklearn.neighbors import KNeighborsClassifier
 
 pd.options.mode.chained_assignment = None  # default='warn'
 from sklearn.model_selection import train_test_split
@@ -59,41 +60,63 @@ y_testFeat = tfvec.transform(y_test)
 
 # SVM is used to model
 x_trainSvm = x_train.astype('int')
-classifierModel = LinearSVC()
-classifierModel.fit(y_trainFeat, x_trainSvm)
-predResult = classifierModel.predict(y_testFeat)
+classifierSVM = LinearSVC()
+classifierSVM.fit(y_trainFeat, x_trainSvm)
+predResMailSVM = classifierSVM.predict(y_testFeat)
 
-# GNB is used to model
+# MNB is used to model
 x_trainGnb = x_train.astype('int')
-classifierModel2 = MultinomialNB()
-classifierModel2.fit(y_trainFeat, x_trainGnb)
-predResult2 = classifierModel2.predict(y_testFeat)
+classifierMNB = MultinomialNB()
+classifierMNB.fit(y_trainFeat, x_trainGnb)
+predResMailMNB = classifierMNB.predict(y_testFeat)
+
+#KNN is used to model
+x_trainKNN = x_train.astype('int')
+classifierKNN = KNeighborsClassifier(n_neighbors=1)
+classifierKNN.fit(y_trainFeat, x_trainKNN)
+predResMailKNN = classifierKNN.predict(y_testFeat)
 
 # Calc accuracy,converting to int - solves - cant handle mix of unknown and binary
 x_test = x_test.astype('int')
 # print(x_test)
 actual_Y = x_test.to_numpy()
 
-print("~~~~~~~~~~SVM RESULTS~~~~~~~~~~")
+print("\tSupport Vector Machine RESULTS")
 # Accuracy score using SVM
-print("Accuracy Score using SVM: {0:.4f}".format(accuracy_score(actual_Y, predResult) * 100))
+print("Accuracy Score using SVM: {0:.4f}".format(accuracy_score(actual_Y, predResMailSVM) * 100))
 # FScore MACRO using SVM
-print("F Score using SVM: {0: .4f}".format(f1_score(actual_Y, predResult, average='macro') * 100))
-cmSVM = confusion_matrix(actual_Y, predResult)
-# "[True negative  False Positive\nFalse Negative True Positive]"
+print("F Score using SVM: {0: .4f}".format(f1_score(actual_Y, predResMailSVM, average='macro') * 100))
+cmSVM = confusion_matrix(actual_Y, predResMailSVM)
+# [True negative  False Positive
+# False Negative True Positive]
 print("Confusion matrix using SVM:")
 print(cmSVM)
-print("~~~~~~~~~~MNB RESULTS~~~~~~~~~~")
+print()
+print("\tMultinomial Näive Bayes RESULTS")
 # Accuracy score using MNB
-print("Accuracy Score using MNB: {0:.4f}".format(accuracy_score(actual_Y, predResult2) * 100))
+print("Accuracy Score using MNB: {0:.4f}".format(accuracy_score(actual_Y, predResMailMNB) * 100))
 # FScore MACRO using MNB
-print("F Score using MNB:{0: .4f}".format(f1_score(actual_Y, predResult2, average='macro') * 100))
-cmMNb = confusion_matrix(actual_Y, predResult2)
-# "[True negative  False Positive\nFalse Negative True Positive]"
+print("F Score using MNB:{0: .4f}".format(f1_score(actual_Y, predResMailMNB, average='macro') * 100))
+cmMNb = confusion_matrix(actual_Y, predResMailMNB)
+# [True negative  False Positive
+# False Negative True Positive]
 print("Confusion matrix using MNB:")
 print(cmMNb)
-
 print()
+print("\tK Nearest Neighbors RESULTS")
+print("Neighbors Number: 1")
+# Accuracy score using KNN
+print("Accuracy Score using KNN: {0:.4f}".format(accuracy_score(actual_Y, predResMailKNN) * 100))
+# FScore MACRO using KNN
+print("F Score using KNN:{0: .4f}".format(f1_score(actual_Y, predResMailKNN, average='macro') * 100))
+cmKNN = confusion_matrix(actual_Y, predResMailKNN)
+# [True negative  False Positive
+# False Negative True Positive]
+print("Confusion matrix using KNN:")
+print(cmKNN)
+print()
+
+print("\n")
 print("/---------------------SpamDetector for SMS--------------------/")
 # using encoding options in order to open and clean the csv, which has some empty columns
 df2 = pd.read_csv("sms_spam.csv", encoding = "ISO-8859-1")
@@ -112,36 +135,56 @@ ys_testFeat = tfvecs.transform(ys_test)
 
 # SVM is used to model
 xs_trainSvm = xs_train.astype('int')
-classifierModel = LinearSVC()
-classifierModel.fit(ys_trainFeat, xs_trainSvm)
-predResult3 = classifierModel.predict(ys_testFeat)
+classifierSVM.fit(ys_trainFeat, xs_trainSvm)
+predResSmsSVM = classifierSVM.predict(ys_testFeat)
 
-# GNB is used to model
+# MNB is used to model
 xs_trainGnb = xs_train.astype('int')
-classifierModel2 = MultinomialNB()
-classifierModel2.fit(ys_trainFeat, xs_trainGnb)
-predResult4 = classifierModel2.predict(ys_testFeat)
+classifierMNB.fit(ys_trainFeat, xs_trainGnb)
+predResSmsMNB = classifierMNB.predict(ys_testFeat)
+
+#KNN is used to model
+xs_trainKNN = xs_train.astype('int')
+# classifierKNN = KNeighborsClassifier(n_neighbors=1)
+classifierKNN.fit(ys_trainFeat, xs_trainKNN)
+predResSmsKNN = classifierKNN.predict(ys_testFeat)
 
 # Calc accuracy,converting to int - solves - cant handle mix of unknown and binary
 xs_test = xs_test.astype('int')
 # print(x_test)
 actual_Ys = xs_test.to_numpy()
 
-print("~~~~~~~~~~SVM RESULTS~~~~~~~~~~")
+print("\tSupport Vector Machine RESULTS")
 # Accuracy score using SVM
-print("Accuracy Score using SVM: {0:.4f}".format(accuracy_score(actual_Ys, predResult3) * 100))
+print("Accuracy Score using SVM: {0:.4f}".format(accuracy_score(actual_Ys, predResSmsSVM) * 100))
 # FScore MACRO using SVM
-print("F Score using SVM: {0: .4f}".format(f1_score(actual_Ys, predResult3, average='macro') * 100))
-cmSVMs = confusion_matrix(actual_Ys, predResult3)
-# "[True negative  False Positive\nFalse Negative True Positive]"
+print("F Score using SVM: {0: .4f}".format(f1_score(actual_Ys, predResSmsSVM, average='macro') * 100))
+cmSVMs = confusion_matrix(actual_Ys, predResSmsSVM)
+# [True negative  False Positive
+# False Negative True Positive]
 print("Confusion matrix using SVM:")
 print(cmSVMs)
-print("~~~~~~~~~~MNB RESULTS~~~~~~~~~~")
+print()
+print("\tMultinomial Näive Bayes RESULTS")
 # Accuracy score using MNB
-print("Accuracy Score using MNB: {0:.4f}".format(accuracy_score(actual_Ys, predResult4) * 100))
+print("Accuracy Score using MNB: {0:.4f}".format(accuracy_score(actual_Ys, predResSmsMNB) * 100))
 # FScore MACRO using MNB
-print("F Score using MNB:{0: .4f}".format(f1_score(actual_Ys, predResult4, average='macro') * 100))
-cmMNbs = confusion_matrix(actual_Ys, predResult4)
-# "[True negative  False Positive\nFalse Negative True Positive]"
+print("F Score using MNB:{0: .4f}".format(f1_score(actual_Ys, predResSmsMNB, average='macro') * 100))
+cmMNbs = confusion_matrix(actual_Ys, predResSmsMNB)
+# [True negative  False Positive
+# False Negative True Positive]
 print("Confusion matrix using MNB:")
 print(cmMNbs)
+print()
+print("\tK Nearest Neighbors RESULTS")
+print("Neighbors Number: 1")
+# Accuracy score using KNN
+print("Accuracy Score using KNN: {0:.4f}".format(accuracy_score(actual_Ys, predResSmsKNN) * 100))
+# FScore MACRO using KNN
+print("F Score using KNN:{0: .4f}".format(f1_score(actual_Ys, predResSmsKNN, average='macro') * 100))
+cmKNNs = confusion_matrix(actual_Ys, predResSmsKNN)
+# [True negative  False Positive
+# False Negative True Positive]
+print("Confusion matrix using KNN:")
+print(cmKNNs)
+print()
