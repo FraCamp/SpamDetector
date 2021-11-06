@@ -1,5 +1,6 @@
 # importing dependencies
 import pandas as pd
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.neighbors import KNeighborsClassifier
 
 pd.options.mode.chained_assignment = None  # default='warn'
@@ -76,6 +77,12 @@ classifierKNN = KNeighborsClassifier(n_neighbors=1)
 classifierKNN.fit(y_trainFeat, x_trainKNN)
 predResMailKNN = classifierKNN.predict(y_testFeat)
 
+#RF is used to model
+x_trainRF = x_train.astype('int')
+classifierRF = RandomForestClassifier(n_estimators=10, max_depth=None, min_samples_split=2, random_state=None)
+classifierRF.fit(y_trainFeat, x_trainRF)
+predResMailRF = classifierRF.predict(y_testFeat)
+
 # Calc accuracy,converting to int - solves - cant handle mix of unknown and binary
 x_test = x_test.astype('int')
 # print(x_test)
@@ -115,6 +122,17 @@ cmKNN = confusion_matrix(actual_Y, predResMailKNN)
 print("Confusion matrix using KNN:")
 print(cmKNN)
 print()
+print("\tRandom Forest RESULTS")
+# Accuracy score using MNB
+print("Accuracy Score using RF: {0:.4f}".format(accuracy_score(actual_Y, predResMailRF) * 100))
+# FScore MACRO using MNB
+print("F Score using RF:{0: .4f}".format(f1_score(actual_Y, predResMailRF, average='macro') * 100))
+cmRF = confusion_matrix(actual_Y, predResMailRF)
+# [True negative  False Positive
+# False Negative True Positive]
+print("Confusion matrix using RF:")
+print(cmRF)
+print()
 
 print("\n")
 print("/---------------------SpamDetector for SMS--------------------/")
@@ -148,6 +166,12 @@ xs_trainKNN = xs_train.astype('int')
 # classifierKNN = KNeighborsClassifier(n_neighbors=1)
 classifierKNN.fit(ys_trainFeat, xs_trainKNN)
 predResSmsKNN = classifierKNN.predict(ys_testFeat)
+
+#RF is used to model
+xs_trainRF = xs_train.astype('int')
+# classifierRF = RandomForestClassifier(n_estimators=10, max_depth=None, min_samples_split=2, random_state=None)
+classifierRF.fit(ys_trainFeat, xs_trainRF)
+predResSmsRF = classifierRF.predict(ys_testFeat)
 
 # Calc accuracy,converting to int - solves - cant handle mix of unknown and binary
 xs_test = xs_test.astype('int')
@@ -187,4 +211,15 @@ cmKNNs = confusion_matrix(actual_Ys, predResSmsKNN)
 # False Negative True Positive]
 print("Confusion matrix using KNN:")
 print(cmKNNs)
+print()
+print("\tRandom Forest RESULTS")
+# Accuracy score using MNB
+print("Accuracy Score using RF: {0:.4f}".format(accuracy_score(actual_Ys, predResSmsRF) * 100))
+# FScore MACRO using MNB
+print("F Score using RF:{0: .4f}".format(f1_score(actual_Ys, predResSmsRF, average='macro') * 100))
+cmRFs = confusion_matrix(actual_Ys, predResSmsRF)
+# [True negative  False Positive
+# False Negative True Positive]
+print("Confusion matrix using RF:")
+print(cmRFs)
 print()
