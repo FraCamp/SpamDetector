@@ -13,14 +13,10 @@ from sklearn.metrics import accuracy_score, confusion_matrix, f1_score
 print("/-------------------SpamDetector for e-Mail-------------------/")
 df1 = pd.read_csv("email_spam.csv")
 df = df1[['label', 'text']]
-# df = df1.where((pd.notnull(df1)), '')
 
-# Categorize Spam as 0 and Not spam as 1
+# Categorize Spam as 1 and Not spam as 0
 df.loc[df["label"] == 'ham', "Category"] = 0
 df.loc[df["label"] == 'spam', "Category"] = 1
-# Leaving the original column "label" (ham, spam), adding a new column "Label"(1,0)
-# df.loc[df["label"] == 'ham', "Label",] = 0
-# df.loc[df["label"] == 'spam', "Label",] = 1
 
 df = df.rename(columns={'text': 'Content'})
 dff = df[['Content', 'Category']]
@@ -32,68 +28,53 @@ y = dff['Content']
 # x_train, x_test and y_train and y_test, using the train_test_split function (sklearn) is possible to decide the
 # shuffling of the data
 x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.8, test_size=0.2, random_state=3)
-# print("x_train")
-# print(x_train)
-# print("y_train")
-# print(y_train)
-#
-# print("x_test")
-# print(x_test)
-# print("y_test")
-# print(y_test)
 
-# feature extraction, coversion to lower case and removal of stop words using TFIDF VECTORIZER
+# feature extraction, conversion to lower case and removal of stop words using TFIDF VECTORIZER
 
-# Finding the term frequency-inverse document frequency (tf-idf, useful into textanalysis and in order to use machine
+# Finding the term frequency-inverse document frequency (tf-idf, useful into text analysis and in order to use machine
 # learning algorithm for Natural Language Processing) by multiplying two metrics: how many times a
 # word appears in a document, and the inverse document frequency of the word across a set of documents
 tfvec = TfidfVectorizer(min_df=1, stop_words='english', lowercase=True)
-# print("TfVectorizer")
 
 y_trainFeat = tfvec.fit_transform(y_train)
 y_testFeat = tfvec.transform(y_test)
-# print("Fit_trasform")
-# print(y_trainFeat.toarray())
-# print("Trasform")
-# print(y_testFeat.toarray())
 
-# print(dff)
-
-# SVM is used to model
+# Training and applying classifiers
+# SVM
 x_trainSvm = x_train.astype('int')
 classifierSVM = LinearSVC()
 classifierSVM.fit(y_trainFeat, x_trainSvm)
 predResMailSVM = classifierSVM.predict(y_testFeat)
 
-# MNB is used to model
+# MNB
 x_trainGnb = x_train.astype('int')
 classifierMNB = MultinomialNB()
 classifierMNB.fit(y_trainFeat, x_trainGnb)
 predResMailMNB = classifierMNB.predict(y_testFeat)
 
-#KNN is used to model
+# KNN
 x_trainKNN = x_train.astype('int')
 classifierKNN = KNeighborsClassifier(n_neighbors=1)
 classifierKNN.fit(y_trainFeat, x_trainKNN)
 predResMailKNN = classifierKNN.predict(y_testFeat)
 
-#RF is used to model
+# RF
 x_trainRF = x_train.astype('int')
 classifierRF = RandomForestClassifier(n_estimators=10, max_depth=None, min_samples_split=2, random_state=None)
 classifierRF.fit(y_trainFeat, x_trainRF)
 predResMailRF = classifierRF.predict(y_testFeat)
 
-#Ada Boost is used to model
+# Adaboost
 x_trainAdaB = x_train.astype('int')
 classifierAdaB = AdaBoostClassifier(n_estimators=100)
 classifierAdaB.fit(y_trainFeat, x_trainAdaB)
 predResMailAdaB = classifierAdaB.predict(y_testFeat)
 
-# Calc accuracy,converting to int - solves - cant handle mix of unknown and binary
+# Converting to int - solves - cant handle mix of unknown and binary
 x_test = x_test.astype('int')
-# print(x_test)
 actual_Y = x_test.to_numpy()
 
+# Metrics and results
 print("\tSupport Vector Machine RESULTS")
 # Accuracy score using SVM
 print("Accuracy Score using SVM: {0:.4f}".format(accuracy_score(actual_Y, predResMailSVM) * 100))
@@ -139,7 +120,7 @@ cmRF = confusion_matrix(actual_Y, predResMailRF)
 print("Confusion matrix using RF:")
 print(cmRF)
 print()
-print("\tAda Boost RESULTS")
+print("\tAdaboost RESULTS")
 print("Estimators Number: 100")
 # Accuracy score using MNB
 print("Accuracy Score using AdaB: {0:.4f}".format(accuracy_score(actual_Y, predResMailAdaB) * 100))
@@ -190,15 +171,14 @@ xs_trainRF = xs_train.astype('int')
 classifierRF.fit(ys_trainFeat, xs_trainRF)
 predResSmsRF = classifierRF.predict(ys_testFeat)
 
-#Ada Boost is used to model
+#Adaboost is used to model
 xs_trainAdaB = xs_train.astype('int')
 # classifierAdaB = AdaBoostClassifier(n_estimators=100)
 classifierAdaB.fit(ys_trainFeat, xs_trainAdaB)
 predResSmsAdaB = classifierAdaB.predict(ys_testFeat)
 
-# Calc accuracy,converting to int - solves - cant handle mix of unknown and binary
+# Converting to int - solves - cant handle mix of unknown and binary
 xs_test = xs_test.astype('int')
-# print(x_test)
 actual_Ys = xs_test.to_numpy()
 
 print("\tSupport Vector Machine RESULTS")
