@@ -12,17 +12,13 @@ from sklearn.metrics import accuracy_score, confusion_matrix, f1_score
 
 print("/-------------------SpamDetector for e-Mail-------------------/")
 df1 = pd.read_csv("email_spam.csv")
-df = df1[['label', 'text']]
-
-# Categorize Spam as 1 and Not spam as 0
-df.loc[df["label"] == 'ham', "Category"] = 0
-df.loc[df["label"] == 'spam', "Category"] = 1
+df = df1[['label_num', 'text']]
 
 df = df.rename(columns={'text': 'Content'})
-dff = df[['Content', 'Category']]
+df = df.rename(columns={'label_num': 'Category'})
 
-x = dff['Category']
-y = dff['Content']
+x = df['Category']
+y = df['Content']
 
 # splitting the original dataset (diveded by columns, x and y) into 4 different dataset
 # x_train, x_test and y_train and y_test, using the train_test_split function (sklearn) is possible to decide the

@@ -1,0 +1,9 @@
+\babel@toc {english}{}
+\contentsline {chapter}{\numberline {1}Introduction}{2}{}%
+\contentsline {chapter}{\numberline {2}Datasets}{3}{}%
+\contentsline {subsection}{\numberline {2.0.1}Data Pre-Processing}{3}{}%
+\contentsline {chapter}{\numberline {3}Design}{4}{}%
+\contentsline {chapter}{\numberline {4}Use Case Diagram}{5}{}%
+\contentsline {chapter}{\numberline {5}UML Class Analysis}{6}{}%
+\contentsline {chapter}{\numberline {6}Implementation and Tests}{7}{}%
+\contentsline {chapter}{\numberline {7}Results}{8}{}%
