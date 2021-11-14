@@ -10,7 +10,55 @@ from sklearn.svm import LinearSVC
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.metrics import accuracy_score, confusion_matrix, f1_score
 
-print("/-------------------SpamDetector for e-Mail-------------------/")
+def SVM(x_train, y_trainFeat, y_testFeat):
+    # x_train = x_train.astype('int')
+    classifier = LinearSVC()
+    classifier.fit(y_trainFeat, x_train)
+    predRes = classifier.predict(y_testFeat)
+    return predRes
+
+def MNB(x_train, y_trainFeat, y_testFeat):
+    # x_train = x_train.astype('int')
+    classifier = MultinomialNB()
+    classifier.fit(y_trainFeat, x_train)
+    predRes = classifier.predict(y_testFeat)
+    return predRes
+
+def KNN(x_train, y_trainFeat, y_testFeat):
+    # x_train = x_train.astype('int')
+    classifier = KNeighborsClassifier(n_neighbors=1)
+    classifier.fit(y_trainFeat, x_train)
+    predRes = classifier.predict(y_testFeat)
+    return predRes
+
+def RF(x_train, y_trainFeat, y_testFeat):
+    # x_train = x_train.astype('int')
+    classifier = RandomForestClassifier(n_estimators=10, max_depth=None, min_samples_split=2, random_state=None)
+    classifier.fit(y_trainFeat, x_train)
+    predRes = classifier.predict(y_testFeat)
+    return predRes
+
+def Adab(x_train, y_trainFeat, y_testFeat):
+    # x_train = x_train.astype('int')
+    classifier = AdaBoostClassifier(n_estimators=100)
+    classifier.fit(y_trainFeat, x_train)
+    predRes = classifier.predict(y_testFeat)
+    return predRes
+
+def show_res(actual, predicted):
+    # Accuracy score using SVM
+    print("Accuracy Score: {0:.4f}".format(accuracy_score(actual, predicted) * 100))
+    # FScore MACRO using SVM
+    print("F Score: {0: .4f}".format(f1_score(actual, predicted, average='macro') * 100))
+    cm = confusion_matrix(actual, predicted)
+    # [True negative  False Positive
+    # False Negative True Positive]
+    print("Confusion Matrix:")
+    print(cm)
+    print()
+
+# Data Preprocessing
+# E-mail dataset
 df1 = pd.read_csv("email_spam.csv")
 df = df1[['label_num', 'text']]
 
@@ -32,104 +80,15 @@ x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.8, test_s
 # word appears in a document, and the inverse document frequency of the word across a set of documents
 tfvec = TfidfVectorizer(min_df=1, stop_words='english', lowercase=True)
 
+# Converting to int - solves - cant handle mix of unknown and binary
+x_train = x_train.astype('int')
+actual_x = x_test.to_numpy()
+
 y_trainFeat = tfvec.fit_transform(y_train)
 y_testFeat = tfvec.transform(y_test)
 
-# Training and applying classifiers
-# SVM
-x_trainSvm = x_train.astype('int')
-classifierSVM = LinearSVC()
-classifierSVM.fit(y_trainFeat, x_trainSvm)
-predResMailSVM = classifierSVM.predict(y_testFeat)
 
-# MNB
-x_trainGnb = x_train.astype('int')
-classifierMNB = MultinomialNB()
-classifierMNB.fit(y_trainFeat, x_trainGnb)
-predResMailMNB = classifierMNB.predict(y_testFeat)
-
-# KNN
-x_trainKNN = x_train.astype('int')
-classifierKNN = KNeighborsClassifier(n_neighbors=1)
-classifierKNN.fit(y_trainFeat, x_trainKNN)
-predResMailKNN = classifierKNN.predict(y_testFeat)
-
-# RF
-x_trainRF = x_train.astype('int')
-classifierRF = RandomForestClassifier(n_estimators=10, max_depth=None, min_samples_split=2, random_state=None)
-classifierRF.fit(y_trainFeat, x_trainRF)
-predResMailRF = classifierRF.predict(y_testFeat)
-
-# Adaboost
-x_trainAdaB = x_train.astype('int')
-classifierAdaB = AdaBoostClassifier(n_estimators=100)
-classifierAdaB.fit(y_trainFeat, x_trainAdaB)
-predResMailAdaB = classifierAdaB.predict(y_testFeat)
-
-# Converting to int - solves - cant handle mix of unknown and binary
-x_test = x_test.astype('int')
-actual_Y = x_test.to_numpy()
-
-# Metrics and results
-print("\tSupport Vector Machine RESULTS")
-# Accuracy score using SVM
-print("Accuracy Score using SVM: {0:.4f}".format(accuracy_score(actual_Y, predResMailSVM) * 100))
-# FScore MACRO using SVM
-print("F Score using SVM: {0: .4f}".format(f1_score(actual_Y, predResMailSVM, average='macro') * 100))
-cmSVM = confusion_matrix(actual_Y, predResMailSVM)
-# [True negative  False Positive
-# False Negative True Positive]
-print("Confusion matrix using SVM:")
-print(cmSVM)
-print()
-print("\tMultinomial Näive Bayes RESULTS")
-# Accuracy score using MNB
-print("Accuracy Score using MNB: {0:.4f}".format(accuracy_score(actual_Y, predResMailMNB) * 100))
-# FScore MACRO using MNB
-print("F Score using MNB:{0: .4f}".format(f1_score(actual_Y, predResMailMNB, average='macro') * 100))
-cmMNb = confusion_matrix(actual_Y, predResMailMNB)
-# [True negative  False Positive
-# False Negative True Positive]
-print("Confusion matrix using MNB:")
-print(cmMNb)
-print()
-print("\tK Nearest Neighbors RESULTS")
-print("Neighbors Number: 1")
-# Accuracy score using KNN
-print("Accuracy Score using KNN: {0:.4f}".format(accuracy_score(actual_Y, predResMailKNN) * 100))
-# FScore MACRO using KNN
-print("F Score using KNN:{0: .4f}".format(f1_score(actual_Y, predResMailKNN, average='macro') * 100))
-cmKNN = confusion_matrix(actual_Y, predResMailKNN)
-# [True negative  False Positive
-# False Negative True Positive]
-print("Confusion matrix using KNN:")
-print(cmKNN)
-print()
-print("\tRandom Forest RESULTS")
-# Accuracy score using MNB
-print("Accuracy Score using RF: {0:.4f}".format(accuracy_score(actual_Y, predResMailRF) * 100))
-# FScore MACRO using MNB
-print("F Score using RF:{0: .4f}".format(f1_score(actual_Y, predResMailRF, average='macro') * 100))
-cmRF = confusion_matrix(actual_Y, predResMailRF)
-# [True negative  False Positive
-# False Negative True Positive]
-print("Confusion matrix using RF:")
-print(cmRF)
-print()
-print("\tAdaboost RESULTS")
-print("Estimators Number: 100")
-# Accuracy score using MNB
-print("Accuracy Score using AdaB: {0:.4f}".format(accuracy_score(actual_Y, predResMailAdaB) * 100))
-# FScore MACRO using MNB
-print("F Score using AdaB:{0: .4f}".format(f1_score(actual_Y, predResMailAdaB, average='macro') * 100))
-cmAdaB = confusion_matrix(actual_Y, predResMailAdaB)
-# [True negative  False Positive
-# False Negative True Positive]
-print("Confusion matrix using AdaB:")
-print(cmAdaB)
-
-print("\n")
-print("/---------------------SpamDetector for SMS--------------------/")
+# SMS dataset
 # using encoding options in order to open and clean the csv, which has some empty columns
 df2 = pd.read_csv("sms_spam.csv", encoding = "ISO-8859-1")
 dfsp = df2[['v1', 'v2']]
@@ -137,99 +96,80 @@ dfsp.loc[dfsp["v1"] == 'ham', "Category"] = 0
 dfsp.loc[dfsp["v1"] == 'spam', "Category"] = 1
 dfsp = dfsp.rename(columns={'v2': 'Content'})
 dfs = dfsp[['Content', 'Category']]
-
 xs = dfs['Category']
 ys = dfs['Content']
 xs_train, xs_test, ys_train, ys_test = train_test_split(xs, ys, train_size=0.8, test_size=0.2, random_state=3)
 tfvecs = TfidfVectorizer(min_df=1, stop_words='english', lowercase=True)
 ys_trainFeat = tfvecs.fit_transform(ys_train)
 ys_testFeat = tfvecs.transform(ys_test)
-
-# SVM is used to model
 xs_trainSvm = xs_train.astype('int')
-classifierSVM.fit(ys_trainFeat, xs_trainSvm)
-predResSmsSVM = classifierSVM.predict(ys_testFeat)
-
-# MNB is used to model
-xs_trainGnb = xs_train.astype('int')
-classifierMNB.fit(ys_trainFeat, xs_trainGnb)
-predResSmsMNB = classifierMNB.predict(ys_testFeat)
-
-#KNN is used to model
-xs_trainKNN = xs_train.astype('int')
-# classifierKNN = KNeighborsClassifier(n_neighbors=1)
-classifierKNN.fit(ys_trainFeat, xs_trainKNN)
-predResSmsKNN = classifierKNN.predict(ys_testFeat)
-
-#RF is used to model
-xs_trainRF = xs_train.astype('int')
-# classifierRF = RandomForestClassifier(n_estimators=10, max_depth=None, min_samples_split=2, random_state=None)
-classifierRF.fit(ys_trainFeat, xs_trainRF)
-predResSmsRF = classifierRF.predict(ys_testFeat)
-
-#Adaboost is used to model
-xs_trainAdaB = xs_train.astype('int')
-# classifierAdaB = AdaBoostClassifier(n_estimators=100)
-classifierAdaB.fit(ys_trainFeat, xs_trainAdaB)
-predResSmsAdaB = classifierAdaB.predict(ys_testFeat)
-
 # Converting to int - solves - cant handle mix of unknown and binary
 xs_test = xs_test.astype('int')
-actual_Ys = xs_test.to_numpy()
+actual_xs = xs_test.to_numpy()
 
+# Training and classification
+print("/-------------------SpamDetector for e-Mail-------------------/")
+# SVM
+predResMailSVM = SVM(x_train, y_trainFeat, y_testFeat)
+# Metrics and results
 print("\tSupport Vector Machine RESULTS")
-# Accuracy score using SVM
-print("Accuracy Score using SVM: {0:.4f}".format(accuracy_score(actual_Ys, predResSmsSVM) * 100))
-# FScore MACRO using SVM
-print("F Score using SVM: {0: .4f}".format(f1_score(actual_Ys, predResSmsSVM, average='macro') * 100))
-cmSVMs = confusion_matrix(actual_Ys, predResSmsSVM)
-# [True negative  False Positive
-# False Negative True Positive]
-print("Confusion matrix using SVM:")
-print(cmSVMs)
-print()
+show_res(actual_x, predResMailSVM)
+
+# MNB
+predResMailMNB = MNB(x_train, y_trainFeat, y_testFeat)
+# Metrics and results
 print("\tMultinomial Näive Bayes RESULTS")
-# Accuracy score using MNB
-print("Accuracy Score using MNB: {0:.4f}".format(accuracy_score(actual_Ys, predResSmsMNB) * 100))
-# FScore MACRO using MNB
-print("F Score using MNB:{0: .4f}".format(f1_score(actual_Ys, predResSmsMNB, average='macro') * 100))
-cmMNbs = confusion_matrix(actual_Ys, predResSmsMNB)
-# [True negative  False Positive
-# False Negative True Positive]
-print("Confusion matrix using MNB:")
-print(cmMNbs)
-print()
+show_res(actual_x, predResMailMNB)
+
+# KNN
+predResMailKNN = KNN(x_train, y_trainFeat, y_testFeat)
+# Metrics and results
 print("\tK Nearest Neighbors RESULTS")
 print("Neighbors Number: 1")
-# Accuracy score using KNN
-print("Accuracy Score using KNN: {0:.4f}".format(accuracy_score(actual_Ys, predResSmsKNN) * 100))
-# FScore MACRO using KNN
-print("F Score using KNN:{0: .4f}".format(f1_score(actual_Ys, predResSmsKNN, average='macro') * 100))
-cmKNNs = confusion_matrix(actual_Ys, predResSmsKNN)
-# [True negative  False Positive
-# False Negative True Positive]
-print("Confusion matrix using KNN:")
-print(cmKNNs)
-print()
+show_res(actual_x, predResMailKNN)
+
+# RF
+predResMailRF = RF(x_train, y_trainFeat, y_testFeat)
+# Metrics and results
 print("\tRandom Forest RESULTS")
-# Accuracy score using MNB
-print("Accuracy Score using RF: {0:.4f}".format(accuracy_score(actual_Ys, predResSmsRF) * 100))
-# FScore MACRO using MNB
-print("F Score using RF:{0: .4f}".format(f1_score(actual_Ys, predResSmsRF, average='macro') * 100))
-cmRFs = confusion_matrix(actual_Ys, predResSmsRF)
-# [True negative  False Positive
-# False Negative True Positive]
-print("Confusion matrix using RF:")
-print(cmRFs)
-print()
-print("\tAda Boost RESULTS")
+show_res(actual_x, predResMailRF)
+
+# Adaboost
+predResMailAdab = Adab(x_train, y_trainFeat, y_testFeat)
+# Metrics and results
+print("\tAdaboost RESULTS")
 print("Estimators Number: 100")
-# Accuracy score using MNB
-print("Accuracy Score using AdaB: {0:.4f}".format(accuracy_score(actual_Ys, predResSmsAdaB) * 100))
-# FScore MACRO using MNB
-print("F Score using AdaB:{0: .4f}".format(f1_score(actual_Ys, predResSmsAdaB, average='macro') * 100))
-cmAdaBs = confusion_matrix(actual_Ys, predResSmsAdaB)
-# [True negative  False Positive
-# False Negative True Positive]
-print("Confusion matrix using AdaB:")
-print(cmAdaBs)
+show_res(actual_x, predResMailAdab)
+
+
+print("\n/---------------------SpamDetector for SMS--------------------/")
+# SVM
+predResSmsSVM = SVM(xs_train, ys_trainFeat, ys_testFeat)
+print("\tSupport Vector Machine RESULTS")
+show_res(actual_xs, predResSmsSVM)
+
+# MNB
+predResSmsMNB = MNB(xs_train, ys_trainFeat, ys_testFeat)
+# Metrics and results
+print("\tMultinomial Näive Bayes RESULTS")
+show_res(actual_xs, predResSmsMNB)
+
+#KNN
+predResSmsKNN = KNN(xs_train, ys_trainFeat, ys_testFeat)
+# Metrics and results
+print("\tK Nearest Neighbors RESULTS")
+print("Neighbors Number: 1")
+show_res(actual_xs, predResSmsKNN)
+
+#RF
+predResSmsRF = RF(xs_train, ys_trainFeat, ys_testFeat)
+# Metrics and results
+print("\tRandom Forest RESULTS")
+show_res(actual_xs, predResSmsRF)
+
+#Adaboost
+predResSmsAdab = Adab(xs_train, ys_trainFeat, ys_testFeat)
+# Metrics and results
+print("\tAdaboost RESULTS")
+print("Estimators Number: 100")
+show_res(actual_xs, predResSmsAdab)
