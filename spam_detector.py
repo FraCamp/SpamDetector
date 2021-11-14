@@ -2,7 +2,6 @@
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
 from sklearn.neighbors import KNeighborsClassifier
-
 pd.options.mode.chained_assignment = None  # default='warn'
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -10,6 +9,7 @@ from sklearn.svm import LinearSVC
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.metrics import accuracy_score, confusion_matrix, f1_score
 
+# functions definitions to train and classify with different algorithms
 def SVM(x_train, y_trainFeat, y_testFeat):
     # x_train = x_train.astype('int')
     classifier = LinearSVC()
@@ -45,6 +45,8 @@ def Adab(x_train, y_trainFeat, y_testFeat):
     predRes = classifier.predict(y_testFeat)
     return predRes
 
+
+# function to show results
 def show_res(actual, predicted):
     # Accuracy score using SVM
     print("Accuracy Score: {0:.4f}".format(accuracy_score(actual, predicted) * 100))
@@ -57,33 +59,25 @@ def show_res(actual, predicted):
     print(cm)
     print()
 
+
 # Data Preprocessing
 # E-mail dataset
 df1 = pd.read_csv("email_spam.csv")
 df = df1[['label_num', 'text']]
-
 df = df.rename(columns={'text': 'Content'})
 df = df.rename(columns={'label_num': 'Category'})
-
 x = df['Category']
 y = df['Content']
 
-# splitting the original dataset (diveded by columns, x and y) into 4 different dataset
-# x_train, x_test and y_train and y_test, using the train_test_split function (sklearn) is possible to decide the
-# shuffling of the data
+# splitting the original dataset (diveded by columns, x and y) into random train and test sets
 x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.8, test_size=0.2, random_state=3)
 
-# feature extraction, conversion to lower case and removal of stop words using TFIDF VECTORIZER
-
-# Finding the term frequency-inverse document frequency (tf-idf, useful into text analysis and in order to use machine
-# learning algorithm for Natural Language Processing) by multiplying two metrics: how many times a
-# word appears in a document, and the inverse document frequency of the word across a set of documents
+# TfidfVectorizer is equivalent to CountVectorizer followed by TfidfTransformer
 tfvec = TfidfVectorizer(min_df=1, stop_words='english', lowercase=True)
 
 # Converting to int - solves - cant handle mix of unknown and binary
 x_train = x_train.astype('int')
 actual_x = x_test.to_numpy()
-
 y_trainFeat = tfvec.fit_transform(y_train)
 y_testFeat = tfvec.transform(y_test)
 
@@ -96,9 +90,14 @@ dfsp.loc[dfsp["v1"] == 'ham', "Category"] = 0
 dfsp.loc[dfsp["v1"] == 'spam', "Category"] = 1
 dfsp = dfsp.rename(columns={'v2': 'Content'})
 dfs = dfsp[['Content', 'Category']]
+
 xs = dfs['Category']
 ys = dfs['Content']
+
+# splitting the original dataset (diveded by columns, x and y) into random train and test sets
 xs_train, xs_test, ys_train, ys_test = train_test_split(xs, ys, train_size=0.8, test_size=0.2, random_state=3)
+
+# TfidfVectorizer is equivalent to CountVectorizer followed by TfidfTransformer
 tfvecs = TfidfVectorizer(min_df=1, stop_words='english', lowercase=True)
 ys_trainFeat = tfvecs.fit_transform(ys_train)
 ys_testFeat = tfvecs.transform(ys_test)
