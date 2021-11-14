@@ -1,8 +1,10 @@
 # importing dependencies
 import pandas as pd
-from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
+# to disable the warning for chained assignment when splitting the datasets for test and training sets
+pd.options.mode.chained_assignment = None
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import AdaBoostClassifier
 from sklearn.neighbors import KNeighborsClassifier
-pd.options.mode.chained_assignment = None  # default='warn'
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.svm import LinearSVC
