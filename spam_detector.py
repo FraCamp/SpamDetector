@@ -113,32 +113,32 @@ print("/-------------------SpamDetector for e-Mail-------------------/")
 # SVM
 predResMailSVM = SVM(x_train, y_trainFeat, y_testFeat)
 # Metrics and results
-print("\tSupport Vector Machine RESULTS")
+print("\tSupport Vector Machine results")
 show_res(actual_x, predResMailSVM)
 
 # MNB
 predResMailMNB = MNB(x_train, y_trainFeat, y_testFeat)
 # Metrics and results
-print("\tMultinomial Näive Bayes RESULTS")
+print("\tMultinomial Näive Bayes results")
 show_res(actual_x, predResMailMNB)
 
 # KNN
 predResMailKNN = KNN(x_train, y_trainFeat, y_testFeat)
 # Metrics and results
-print("\tK Nearest Neighbors RESULTS")
+print("\tK Nearest Neighbors results")
 print("Neighbors Number: 1")
 show_res(actual_x, predResMailKNN)
 
 # RF
 predResMailRF = RF(x_train, y_trainFeat, y_testFeat)
 # Metrics and results
-print("\tRandom Forest RESULTS")
+print("\tRandom Forest results")
 show_res(actual_x, predResMailRF)
 
 # Adaboost
 predResMailAdab = Adab(x_train, y_trainFeat, y_testFeat)
 # Metrics and results
-print("\tAdaboost RESULTS")
+print("\tAdaboost results")
 print("Estimators Number: 100")
 show_res(actual_x, predResMailAdab)
 
@@ -146,31 +146,31 @@ show_res(actual_x, predResMailAdab)
 print("\n/---------------------SpamDetector for SMS--------------------/")
 # SVM
 predResSmsSVM = SVM(xs_train, ys_trainFeat, ys_testFeat)
-print("\tSupport Vector Machine RESULTS")
+print("\tSupport Vector Machine results")
 show_res(actual_xs, predResSmsSVM)
 
 # MNB
 predResSmsMNB = MNB(xs_train, ys_trainFeat, ys_testFeat)
 # Metrics and results
-print("\tMultinomial Näive Bayes RESULTS")
+print("\tMultinomial Näive Bayes results")
 show_res(actual_xs, predResSmsMNB)
 
 #KNN
 predResSmsKNN = KNN(xs_train, ys_trainFeat, ys_testFeat)
 # Metrics and results
-print("\tK Nearest Neighbors RESULTS")
+print("\tK Nearest Neighbors results")
 print("Neighbors Number: 1")
 show_res(actual_xs, predResSmsKNN)
 
 #RF
 predResSmsRF = RF(xs_train, ys_trainFeat, ys_testFeat)
 # Metrics and results
-print("\tRandom Forest RESULTS")
+print("\tRandom Forest results")
 show_res(actual_xs, predResSmsRF)
 
 #Adaboost
 predResSmsAdab = Adab(xs_train, ys_trainFeat, ys_testFeat)
 # Metrics and results
-print("\tAdaboost RESULTS")
+print("\tAdaboost results")
 print("Estimators Number: 100")
 show_res(actual_xs, predResSmsAdab)

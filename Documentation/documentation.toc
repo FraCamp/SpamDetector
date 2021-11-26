@@ -6,6 +6,5 @@
 \contentsline {section}{\numberline {3.1}Implementation}{4}{}%
 \contentsline {subsection}{\numberline {3.1.1}Libraries}{4}{}%
 \contentsline {subsection}{\numberline {3.1.2}Functions}{4}{}%
-\contentsline {subsubsection}{Support Vector Machine}{4}{}%
-\contentsline {subsection}{\numberline {3.1.3}Main code}{4}{}%
-\contentsline {chapter}{\numberline {4}Tests and results}{5}{}%
+\contentsline {subsection}{\numberline {3.1.3}Main code}{5}{}%
+\contentsline {chapter}{\numberline {4}Results}{6}{}%

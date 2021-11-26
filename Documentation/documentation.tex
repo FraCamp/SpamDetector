@@ -164,7 +164,149 @@ The libraries involved into this application are two:
 \end{itemize}
 Pandas gives the possibility to use a dataset in .csv (and many others) from the disk, implementing it on a dataframe into the main memory to use all the machine learning algorithm that are imported from Sklearn.
 \subsection{Functions}
-\subsubsection{Support Vector Machine}
+The functions are meant to implement all the algorithm used, which are the following:
+\begin{itemize}
+	\item Support Vector Machine
+	\item Multinomial Näive Bayes
+	\item K Nearest Neighbor
+	\item Random Forest
+	\item AdaBoost
+\end{itemize}
+
+\noindent These functions are written to use them with different datasets, the SMS dataset and the E-Mail dataset as already mention earlier.
+
+\noindent There is also another function that is called to show the result of all the algorithms.
+\newpage
 \subsection{Main code}
-\chapter{Tests and results}
+This section is used to show some insight on the main code.
+
+\noindent Here will be shown a bit of the dataset cleaning and processing that has been made, and described into the Data Preprocessing chapter. 
+
+\lstset{ language=json}
+\begin{lstlisting}
+	df2 = pd.read_csv("sms_spam.csv", encoding = "ISO-8859-1")
+	dfsp = df2[['v1', 'v2']]
+	dfsp.loc[dfsp["v1"] == 'ham', "Category"] = 0
+	dfsp.loc[dfsp["v1"] == 'spam', "Category"] = 1
+	dfsp = dfsp.rename(columns={'v2': 'Content'})
+	dfs = dfsp[['Content', 'Category']]
+\end{lstlisting}
+
+\noindent The following code will give a look at one of the function, the one that implement the Support Vector Machine. Since these functions are quite similar there is no need to show them all here.
+
+\lstset{ language=json}
+\begin{lstlisting}
+	def SVM(x_train, y_trainFeat, y_testFeat):
+		classifier = LinearSVC()
+		classifier.fit(y_trainFeat, x_train)
+		predRes = classifier.predict(y_testFeat)
+		return predRes
+\end{lstlisting}
+
+\noindent The following code lines will show the functions calls, also in this case in order to avoid repetitions only few functions call will be shown.
+
+\lstset{ language=json}
+\begin{lstlisting}
+	# KNN
+	predResMailKNN = KNN(x_train, y_trainFeat, y_testFeat)
+	# Metrics and results
+	print("\tK Nearest Neighbors RESULTS")
+	print("Neighbors Number: 1")
+	show_res(actual_x, predResMailKNN)
+	
+	# RF
+	predResMailRF = RF(x_train, y_trainFeat, y_testFeat)
+	# Metrics and results
+	print("\tRandom Forest RESULTS")
+	show_res(actual_x, predResMailRF)
+\end{lstlisting}
+\chapter{Results}
+The results are as expected very good .....scrivere roba riguardante il motivo per il quale i risultati sono expected magari elencando alcune peculiarità degli algoritmi 
+
+\noindent The metrics that shows the results goodness are: Accuracy, F Score and Confusion Matrix; Chosen in order to give a deep look at the algorithms behavior.
+
+\noindent Here the results for what concern the E-mail dataset:
+
+\begin{lstlisting}
+	/-------------------SpamDetector for e-Mail-------------------/
+	Support Vector Machine results
+	Accuracy Score: 98.6473
+	F Score:  98.3941
+	Confusion Matrix:
+	[[716  13]
+	[  1 305]]
+	
+	Multinomial Naive Bayes results
+	Accuracy Score: 91.3043
+	F Score:  88.5304
+	Confusion Matrix:
+	[[727   2]
+	[ 88 218]]
+	
+	K Nearest Neighbors results
+	Neighbors Number: 1
+	Accuracy Score: 95.8454
+	F Score:  94.9084
+	Confusion Matrix:
+	[[718  11]
+	[ 32 274]]
+	
+	Random Forest results
+	Accuracy Score: 95.4589
+	F Score:  94.5432
+	Confusion Matrix:
+	[[706  23]
+	[ 24 282]]
+	
+	Adaboost results
+	Estimators Number: 100
+	Accuracy Score: 96.9082
+	F Score:  96.3159
+	Confusion Matrix:
+	[[709  20]
+	[ 12 294]]
+\end{lstlisting}
+
+\newpage
+\noindent Here the results for what concern the SMS dataset:
+
+\begin{lstlisting}
+	/---------------------SpamDetector for SMS--------------------/
+	Support Vector Machine results
+	Accuracy Score: 98.5650
+	F Score:  96.8657
+	Confusion Matrix:
+	[[960   0]
+	[ 16 139]]
+	
+	Multinomial Naive Bayes results
+	Accuracy Score: 97.1300
+	F Score:  93.4249
+	Confusion Matrix:
+	[[960   0]
+	[ 32 123]]
+	
+	K Nearest Neighbors results
+	Neighbors Number: 1
+	Accuracy Score: 94.7982
+	F Score:  87.0259
+	Confusion Matrix:
+	[[960   0]
+	[ 58  97]]
+	
+	Random Forest results
+	Accuracy Score: 97.4888
+	F Score:  94.3510
+	Confusion Matrix:
+	[[959   1]
+	[ 27 128]]
+	
+	Adaboost results
+	Estimators Number: 100
+	Accuracy Score: 97.7578
+	F Score:  95.0885
+	Confusion Matrix:
+	[[956   4]
+	[ 21 134]]
+\end{lstlisting}
 \end{document}
