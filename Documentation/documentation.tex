@@ -113,7 +113,7 @@
 			% Title
 			\HRule \\[0.4cm]
 			{ \LARGE 
-				\textbf{SpamDetector}\\[0.4cm]
+				\textbf{Spam Detector}\\[0.4cm]
 				{Project for Data Mining and Machine Learning}\\[0.4cm]
 			}
 			\HRule \\[1.5cm]
@@ -132,9 +132,9 @@
 
 \tableofcontents
 \chapter{Introduction}
-The purpose of this documentation is to prove the machine learning algorithms utility for the detection of spam, useless messages, into dataset of E-Mails and SMS.
+Since quite a while now, spam is a popular term that specific messages not desired, and now days this kind of messages are always more frequent by electronic mail or by SMS, these two are the use case token in consideration in this paper.
+Purpose of this documentation is to prove the machine learning algorithms utility for the detection of spam, useless messages, into dataset of E-Mails and SMS.
 
-\noindent The project is carried out using python.
 \section{Datasets}
 The datasets used for this project are two:
 \begin{itemize}
@@ -162,10 +162,10 @@ The libraries involved into this application are two:
 \end{itemize}
 Pandas gives the possibility to use a dataset in .csv (and many others) from the disk, implementing it on a dataframe into the main memory to use all the machine learning algorithm that are imported from Sklearn.
 \subsection{Functions}
-The functions are meant to implement all the algorithm used, which are the following:
+The functions are meant to implement all the classifiers used, which are the following:
 \begin{itemize}
 	\item Support Vector Machine
-	\item Multinomial Näive Bayes
+	\item Näive Bayes
 	\item K Nearest Neighbor
 	\item Random Forest
 	\item AdaBoost
@@ -176,7 +176,7 @@ The functions are meant to implement all the algorithm used, which are the follo
 \noindent There is also another function that is called to show the result of all the algorithms.
 \newpage
 \subsection{Main code}
-This section is used to show some insight on the main code.
+This section is used to show some insight of the main code.
 
 \noindent Here will be shown a bit of the dataset cleaning and processing that has been made, and described into the Data Preprocessing chapter. 
 
@@ -219,11 +219,29 @@ This section is used to show some insight on the main code.
 	show_res(actual_x, predResMailRF)
 \end{lstlisting}
 \chapter{Results}
-The results are as expected very good .....scrivere roba riguardante il motivo per il quale i risultati sono expected magari elencando alcune peculiarità degli algoritmi 
+Now some considerations based on results per every classifier utilized.
+
+\noindent All the results are visible in the next page.
+
+\subsubsection{Support Vector Machine}
+Support Vector Machine is a classifier which use hyperplane creation in order to separate different classes. As the result suggests this was a extremely good classifier for this type of datasets. This was expected since there is already some literature that's evidence that this classifier for text classification problem is one of the best if not the best.  
+
+\subsubsection{Näive Bayes}
+A statistical classifier which performs probabilistic prediction on the class membership, based on the Bayes' Theorem. The results here are pretty good, in this particular experiments the version of the Näive Bayes classifier utilized was the Multinomial Näive Bayes which is the best version for text classification problems.
+
+\subsubsection{K Nearest Neighbor}
+The nearest neighbor, defined in terms of euclidean distance, k nearest neighbor returns the most common value among the k training examples nearest to the instance that need to be classified. For this kind of problem (text classification for spam detection) the best value for k was 1. The results were very good all calculated with k = 1.
+
+\subsubsection{Random Forest}
+An algorithm characterized by an ensemble of classifier where each one is a decision tree classifier generated using a random selection of attributes at each node to determine the split, every tree gets to vote and the most popular class is returned. The metrics tells very good results for this algorithm in this kind of classification problem.
+
+\subsubsection{AdaBoost}
+A boosting algorithm which uses an ensemble of classifier, where each one gives a weighted vote, based on how well the classifier performs. The lower a classifier error rate the more accurate it is and so the higher is the weight for its vote. Also in this case the metrics for this algorithm are very good.
+
+\newpage
+\noindent Here the results for what concern the E-mail dataset:
 
 \noindent The metrics that shows the results goodness are: Accuracy, F Score and Confusion Matrix; Chosen in order to give a deep look at the algorithms behavior.
-
-\noindent Here the results for what concern the E-mail dataset:
 
 \begin{lstlisting}
 	/-------------------SpamDetector for e-Mail-------------------/

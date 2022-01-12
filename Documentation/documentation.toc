@@ -8,3 +8,8 @@
 \contentsline {subsection}{\numberline {2.1.2}Functions}{3}{}%
 \contentsline {subsection}{\numberline {2.1.3}Main code}{4}{}%
 \contentsline {chapter}{\numberline {3}Results}{5}{}%
+\contentsline {subsubsection}{Support Vector Machine}{5}{}%
+\contentsline {subsubsection}{Näive Bayes}{5}{}%
+\contentsline {subsubsection}{K Nearest Neighbor}{5}{}%
+\contentsline {subsubsection}{Random Forest}{5}{}%
+\contentsline {subsubsection}{AdaBoost}{5}{}%
