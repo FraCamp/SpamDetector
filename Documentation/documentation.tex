@@ -151,6 +151,44 @@ The datasets found were already pretty good for the type of result this project 
 
 \noindent The SMS file had need a little more work to obtain a dataset usable, because the it has five columns named "v1", "v2", "", "" and "", the first contains the words "ham", for the messages which are not classified as spam and "spam"; the second column contains the actual messages and the last three columns are basically blank, so in order to obtain a good dataset to work with the last three columns has been discharged the first two are taken in consideration, but in the first one the "ham" word is changed with a "0" and the "spam" word with a "1", in order to have the same kind of datasets between the E-mail and the SMSs.
 
+\section{Features Vector}
+In order to gather features from a collection of raw documents, the e-mail and SMS text, a function available on the Scikit-learn has been used, TfidfVectorizer, a function that let the user convert a collection of raw documents to a matrix of TF-IDF features. TfidfVectorizer has some parameters to optimize the conversion, here three parameters were utilized:
+
+\newpage
+\begin{itemize}
+	\item min\_df = 1 -> When building the vocabulary ignore terms that have a document frequency strictly lower than the given threshold.
+	\item stop\_words = 'english' -> In order to ignore the english stop\_words.
+	\item lowercase = True -> Convert all characters to lowercase before tokenizing.
+\end{itemize}
+After this function call from string e-mail and SMS, TfidfVectorizer gave back, as mentioned earlier, a matrix of TF-IDF which is a numeric (real) matrix.
+
+\noindent To better clarify from this kind of data set:
+\begin{lstlisting}
+3075    Mum, hope you are having a great day. Hoping t...
+1787                           Yes:)sura in sun tv.:)lol.
+1614    Me sef dey laugh you. Meanwhile how's my darli...
+4304                Yo come over carlos will be here soon
+3266                    Ok then i come n pick u at engin?
+...
+\end{lstlisting}
+
+\noindent To this features vector:
+\begin{lstlisting}
+(0, 741)      0.3219352588930141
+(0, 3979)     0.2410582143632299
+(0, 4296)     0.3891385935794867
+(0, 6599)     0.20296878731699391
+(0, 3386)     0.3219352588930141
+(0, 2122)     0.38613577623520473
+(0, 3136)     0.440116181574609
+...
+\end{lstlisting}
+
+\noindent In order to implement all the classifiers took in consideration in the best way possible to get the best results.
+
+\subsection{TF-IDF} 
+Short for Term Frequency - Inverse Document Frequency, is a numeric statistic that is intended to reflect how important is a word in a document. The idea is to give importance to the terms who appear into the document but usually are not that frequent.
+
 \chapter{Design}
 The application design is pretty basic, it is written in python (version 3) does not involve any classes, just the creation of some functions in order to keep the code clean and more understandable.
 \section{Implementation}
@@ -158,7 +196,7 @@ The application design is pretty basic, it is written in python (version 3) does
 The libraries involved into this application are two:
 \begin{itemize}
 	\item Pandas
-	\item Sklearn
+	\item Scikit-learn
 \end{itemize}
 Pandas gives the possibility to use a dataset in .csv (and many others) from the disk, implementing it on a dataframe into the main memory to use all the machine learning algorithm that are imported from Sklearn.
 \subsection{Functions}
