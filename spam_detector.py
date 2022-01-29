@@ -20,14 +20,12 @@ def SVM(x_train, y_train, y_test):
     return predRes
 
 def MNB(x_train, y_train, y_test):
-    # x_train = x_train.astype('int')
     classifier = MultinomialNB()
     classifier.fit(y_train, x_train)
     predRes = classifier.predict(y_test)
     return predRes
 
 def KNN(x_train, y_train, y_test):
-    # x_train = x_train.astype('int')
     classifier = KNeighborsClassifier(n_neighbors=1)
     classifier.fit(y_train, x_train)
     predRes = classifier.predict(y_test)
@@ -87,13 +85,11 @@ for train_index, test_index in kf.split(df):
     #print(count_vector.get_feature_names()[:100])
     print(count_vector.get_feature_names_out())
     # print(len(count_vector.get_feature_names()))
-    print("Tokens' number:")
-    print(len(count_vector.get_feature_names_out()))
     #Mapping the terms to features' indexes
     #print(count_vector.vocabulary_)
     print("Description of the word occurences data stractures:")
     print(type(y_train_counts))
-    print("(Documents, Tokens)")
+    print("(E-mail, Tokens)")
     print(y_train_counts.shape)
     print("Word occurences:")
     print(y_train_counts[0])
@@ -171,13 +167,11 @@ for train_index, test_index in kf.split(dfs):
     print(count_vector.get_feature_names_out())
     #Deprecated function(get_features_names)
     #print(count_vector.get_feature_names())
-    print("Tokens' number:")
-    print(len(count_vector.get_feature_names_out()))
     # Mapping the terms to features' indexes
     # print(count_vector.vocabulary_)
     print("Description of the word occurences data stractures:")
     print(type(y_train_counts_sms))
-    print("(Documents, Tokens)")
+    print("(SMS, Tokens)")
     print(y_train_counts_sms.shape)
     print("Word occurences:")
     print(y_train_counts_sms[0])
